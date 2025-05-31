@@ -13,7 +13,7 @@ const LoginAdmin = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:3001/loginAdmin', {
+      const response = await axios.post('https://buku-tukar-559917148272.us-central1.run.app/loginAdmin', {
         email,
         password
       }, {
