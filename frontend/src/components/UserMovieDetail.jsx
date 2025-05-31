@@ -27,7 +27,7 @@ const UserMovieDetail = () => {
       setReviewsLoading(true);
       console.log('Fetching reviews...');
       
-      const response = await axios.get('http://localhost:3001/reviews', {
+      const response = await axios.get('https://buku-tukar-559917148272.us-central1.run.app/reviews', {
         timeout: 10000
       });
       
@@ -62,7 +62,7 @@ const UserMovieDetail = () => {
         // Fetch movie - try both endpoints
         try {
           console.log('Fetching movie with ID:', id);
-          const response = await axios.get(`http://localhost:3001/Movies/${id}`);
+          const response = await axios.get(`https://buku-tukar-559917148272.us-central1.run.app/Movies/${id}`);
           console.log('Movie data received:', response.data);
           setMovie(response.data);
           setLoading(false);
@@ -71,7 +71,7 @@ const UserMovieDetail = () => {
           
           // Try lowercase endpoint if uppercase fails
           try {
-            const response = await axios.get(`http://localhost:3001/movies/${id}`);
+            const response = await axios.get(`https://buku-tukar-559917148272.us-central1.run.app/movies/${id}`);
             setMovie(response.data);
             setLoading(false);
           } catch (secondError) {
