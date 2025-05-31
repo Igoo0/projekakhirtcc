@@ -31,7 +31,7 @@ const Dashboard = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/Movies');
+      const response = await axios.get('https://buku-tukar-559917148272.us-central1.run.app/Movies');
       setMovies(response.data);
       setFilteredMovies(response.data);
     } catch (error) {
@@ -41,7 +41,7 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.delete('http://localhost:3001/logoutAdmin', {
+      await axios.delete('https://buku-tukar-559917148272.us-central1.run.app/logoutAdmin', {
         withCredentials: true
       });
       localStorage.removeItem('accessToken');
@@ -56,7 +56,7 @@ const Dashboard = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus film ini?')) {
       try {
-        await axios.delete(`http://localhost:3001/Movies/${id}`);
+        await axios.delete(`https://buku-tukar-559917148272.us-central1.run.app/Movies/${id}`);
         fetchMovies(); // Refresh the list
       } catch (error) {
         console.error("Error deleting movie:", error);
