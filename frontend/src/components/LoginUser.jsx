@@ -15,7 +15,7 @@ const LoginUser = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:3001/login', {
+      const response = await axios.post('https://buku-tukar-559917148272.us-central1.run.app/login', {
         email,
         password
       }, {
