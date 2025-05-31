@@ -71,7 +71,7 @@ const AddMovie = () => {
         submitData.append('poster', posterFile);
       }
       
-      await axios.post('http://localhost:3001/Movies', submitData, {
+      await axios.post('https://buku-tukar-559917148272.us-central1.run.app/Movies', submitData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
