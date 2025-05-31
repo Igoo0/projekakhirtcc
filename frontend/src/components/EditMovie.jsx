@@ -20,7 +20,7 @@ const EditMovie = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/Movies/${id}`);
+        const response = await axios.get(`https://buku-tukar-559917148272.us-central1.run.app/Movies/${id}`);
         const movie = response.data;
         
         // Format date for input field (YYYY-MM-DD)
@@ -58,7 +58,7 @@ const EditMovie = () => {
     e.preventDefault();
     
     try {
-      await axios.patch(`http://localhost:3001/Movies/${id}`, {
+      await axios.patch(`https://buku-tukar-559917148272.us-central1.run.app/Movies/${id}`, {
         ...formData,
         duration: parseInt(formData.duration) // Convert to integer
       });
