@@ -35,7 +35,7 @@ axios.interceptors.response.use(
     if (error.response?.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const response = await axios.get('http://localhost:3001/token', {
+        const response = await axios.get('https://buku-tukar-559917148272.us-central1.run.app/token', {
           withCredentials: true
         });
         
