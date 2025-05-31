@@ -22,7 +22,7 @@ const AdminRegister = () => {
     setLoading(true);
     
     try {
-      await axios.post('http://localhost:3001/registerAdmin', {
+      await axios.post('https://buku-tukar-559917148272.us-central1.run.app/registerAdmin', {
         username,
         email,
         password
