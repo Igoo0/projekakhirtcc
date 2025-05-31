@@ -11,9 +11,11 @@ const AddMovie = () => {
     genre: '',
     duration: '',
     synopsis: '',
-    cast: '',
-    poster: ''
+    cast: ''
   });
+  
+  const [posterFile, setPosterFile] = useState(null);
+  const [posterPreview, setPosterPreview] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -22,13 +24,57 @@ const AddMovie = () => {
     });
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+      if (!allowedTypes.includes(file.type)) {
+        alert('Please select a valid image file (JPEG, PNG, or GIF)');
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        return;
+      }
+      
+      setPosterFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPosterPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
-      await axios.post('http://localhost:3001/Movies', {
-        ...formData,
-        duration: parseInt(formData.duration) // Convert to integer
+      // Create FormData object for file upload
+      const submitData = new FormData();
+      
+      // Append form fields
+      Object.keys(formData).forEach(key => {
+        submitData.append(key, formData[key]);
+      });
+      
+      // Convert duration to integer
+      submitData.set('duration', parseInt(formData.duration));
+      
+      // Append poster file if selected
+      if (posterFile) {
+        submitData.append('poster', posterFile);
+      }
+      
+      await axios.post('http://localhost:3001/Movies', submitData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
       
       alert('Movie successfully added!');
@@ -45,6 +91,16 @@ const AddMovie = () => {
 
   const handleCancel = () => {
     navigate('/dashboard');
+  };
+
+  const removePoster = () => {
+    setPosterFile(null);
+    setPosterPreview(null);
+    // Clear file input
+    const fileInput = document.getElementById('poster-input');
+    if (fileInput) {
+      fileInput.value = '';
+    }
   };
 
   return (
@@ -145,6 +201,20 @@ const AddMovie = () => {
           background-color: #5a6578;
           border-color: #777;
         }
+        .danger-btn {
+          background-color: #e53e3e;
+          color: #ffffff;
+          border: none;
+          border-radius: 20px;
+          padding: 8px 16px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        .danger-btn:hover {
+          background-color: #c53030;
+        }
         .help-text {
           font-size: 12px;
           color: #888;
@@ -163,6 +233,62 @@ const AddMovie = () => {
         }
         .form-col {
           flex: 1;
+        }
+        .file-upload-area {
+          border: 2px dashed #404040;
+          border-radius: 8px;
+          padding: 2rem;
+          text-align: center;
+          background: #2a2a2a;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+        .file-upload-area:hover {
+          border-color: #64ffda;
+          background: #333;
+        }
+        .file-upload-area.has-file {
+          border-color: #64ffda;
+          background: #2a3a3a;
+        }
+        .preview-container {
+          position: relative;
+          display: inline-block;
+          margin-top: 1rem;
+        }
+        .preview-image {
+          max-width: 200px;
+          max-height: 300px;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .remove-btn {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background: #e53e3e;
+          color: white;
+          border: none;
+          border-radius: 50%;
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
+          font-size: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .file-input {
+          display: none;
+        }
+        .upload-text {
+          color: #64ffda;
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+        }
+        .upload-subtext {
+          color: #888;
+          font-size: 14px;
         }
         @media (max-width: 768px) {
           .form-row {
@@ -271,16 +397,48 @@ const AddMovie = () => {
           </div>
 
           <div className="field-group">
-            <label className="custom-label">Poster URL</label>
-            <input
-              className="custom-input"
-              type="text"
-              name="poster"
-              placeholder="Example: /uploads/posters/moviename.jpg"
-              value={formData.poster}
-              onChange={handleChange}
-            />
-            <p className="help-text">Upload poster to backend/public/uploads/posters/ folder first</p>
+            <label className="custom-label">Movie Poster</label>
+            <div 
+              className={`file-upload-area ${posterFile ? 'has-file' : ''}`}
+              onClick={() => document.getElementById('poster-input').click()}
+            >
+              <input
+                id="poster-input"
+                className="file-input"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+              
+              {!posterPreview ? (
+                <div>
+                  <div className="upload-text">Click to upload poster</div>
+                  <div className="upload-subtext">PNG, JPG, GIF up to 5MB</div>
+                </div>
+              ) : (
+                <div className="preview-container">
+                  <img 
+                    src={posterPreview} 
+                    alt="Poster preview" 
+                    className="preview-image"
+                  />
+                  <button
+                    type="button"
+                    className="remove-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removePoster();
+                    }}
+                    title="Remove poster"
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+            </div>
+            <p className="help-text">
+              {posterFile ? `Selected: ${posterFile.name}` : 'No file selected'}
+            </p>
           </div>
 
           <div style={{ 

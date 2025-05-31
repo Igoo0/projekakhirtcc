@@ -25,9 +25,12 @@ app.use(cors({
 
 app.use(cookieParser());
 app.use(express.json());
+// ✅ Add this for form data handling (helpful for file uploads)
+app.use(express.urlencoded({ extended: true }));
+
 app.set("view engine", "ejs");
 
-// ✅ Serve static files from public folder
+// ✅ Serve static files from public folder (already perfect for file uploads)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
@@ -37,7 +40,26 @@ app.use(UserRoute);
 app.use(AdminRoute);
 app.use(ReviewRoute);
 
+// ✅ Add error handling middleware for file upload errors
+app.use((error, req, res, next) => {
+  // Handle Multer errors (file upload errors)
+  if (error.code === 'LIMIT_FILE_SIZE') {
+    return res.status(400).json({ message: 'File too large. Maximum size is 5MB.' });
+  }
+  if (error.code === 'LIMIT_UNEXPECTED_FILE') {
+    return res.status(400).json({ message: 'Too many files or unexpected field name.' });
+  }
+  
+  if (error.message && error.message.includes('Invalid file type')) {
+    return res.status(400).json({ message: error.message });
+  }
+  
+  console.error('Server Error:', error);
+  res.status(500).json({ message: 'Internal server error' });
+});
+
 // ✅ Backend runs on 3001
 app.listen(3001, () => {
   console.log('Server is running on port 3001');
+  console.log('File uploads will be stored in: public/uploads/posters/');
 });
