@@ -15,7 +15,7 @@ const MovieDetail = () => {
       setReviewsLoading(true);
       console.log('Fetching reviews...');
       
-      const response = await axios.get('http://localhost:3001/reviews', {
+      const response = await axios.get('https://buku-tukar-559917148272.us-central1.run.app/reviews', {
         timeout: 10000
       });
       
