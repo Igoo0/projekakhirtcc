@@ -31,7 +31,7 @@ const UserDashboard = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/Movies');
+      const response = await axios.get('https://buku-tukar-559917148272.us-central1.run.app/Movies');
       setMovies(response.data);
       setFilteredMovies(response.data);
     } catch (error) {
@@ -42,7 +42,7 @@ const UserDashboard = () => {
   const handleLogout = async () => {
     try {
       // Change to user logout endpoint if different from admin
-      await axios.delete('http://localhost:3001/logoutUser', {
+      await axios.delete('https://buku-tukar-559917148272.us-central1.run.app/logoutUser', {
         withCredentials: true
       });
       localStorage.removeItem('accessToken');
