@@ -5,16 +5,15 @@ POST http://localhost:3001/Movies
 Content-Type: application/json
 
 {
-  "name": "The Big 4",
-  "director": "Timo Tjahjanto",
-  "release_date": "2022-12-15",
-  "genre": "Action, Comedy, Crime",
-  "duration": 141,
-  "synopsis": "Four retired assassins team up with a straight-laced detective to uncover the truth behind her father’s mysterious death.",
-  "cast": "Abimana Aryasatya, Putri Marino, Lutesha, Arie Kriting",
-  "poster": "/uploads/posters/thebig4.jpg"
+  "name": "Beyoncé Bowl 2024",
+  "director": "Beyoncé Knowles-Carter",
+  "release_date": "2024-02-11",
+  "genre": "Music, Concert",
+  "duration": 30,
+  "synopsis": "Beyoncé returns to the Super Bowl Halftime Show in a powerful, genre-spanning performance celebrating her legacy, artistry, and the release of her new era. The show blends iconic choreography, live vocals, and surprise guests.",
+  "cast": "Beyoncé, special guests",
+  "poster": "/uploads/posters/beyonce-bowl-2024.jpg"
 }
-
 
 ###
 POST http://localhost:3000/Movies

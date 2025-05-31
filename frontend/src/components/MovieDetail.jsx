@@ -64,14 +64,30 @@ const MovieDetail = () => {
   };
 
   const handleDeleteReview = async (reviewId) => {
+    console.log('Attempting to delete review:', reviewId);
+    
     if (window.confirm('Are you sure you want to delete this review?')) {
       try {
-        await axios.delete(`http://localhost:3001/reviews/${reviewId}`);
+        console.log('Sending DELETE request to:', `http://localhost:3001/reviews/${reviewId}`);
+        
+        const response = await axios.delete(`http://localhost:3001/reviews/${reviewId}`);
+        
+        console.log('Delete response:', response);
         alert('Review successfully deleted');
-        await fetchReviews();
+        await fetchReviews(); // Refresh the reviews list
       } catch (error) {
-        console.error('Error deleting review:', error);
-        alert('Failed to delete review');
+        console.error('Full error object:', error);
+        if (error.response) {
+          console.error('Response data:', error.response.data);
+          console.error('Response status:', error.response.status);
+          alert(`Failed to delete review: ${error.response.data.message || 'Unknown error'}`);
+        } else if (error.request) {
+          console.error('No response received:', error.request);
+          alert('Failed to delete review: No response from server');
+        } else {
+          console.error('Request error:', error.message);
+          alert('Failed to delete review: Request failed');
+        }
       }
     }
   };
@@ -240,6 +256,9 @@ const MovieDetail = () => {
           transition: all 0.2s ease;
           cursor: pointer;
           font-weight: 500;
+        }
+        .danger-button:hover {
+          background-color: #c53030;
         }
         .admin-notice {
           background: #2a2a2a;

@@ -166,11 +166,12 @@ export const updateReview = async (req, res) => {
   }
 };
 
-// Delete a review
+// Delete a review - Admin can delete any review
 export const deleteReview = async (req, res) => {
   try {
     const { id } = req.params;
-    const { userId } = req.body; // Optional: for security check
+    
+    console.log(`Admin attempting to delete review ${id}`);
     
     // Find the review
     const review = await Review.findByPk(id);
@@ -179,13 +180,10 @@ export const deleteReview = async (req, res) => {
       return res.status(404).json({ message: 'Review not found' });
     }
     
-    // Check if the user owns this review (optional security check)
-    if (userId && review.userId !== userId) {
-      return res.status(403).json({ message: 'You can only delete your own reviews' });
-    }
-    
-    // Delete the review
+    // Delete the review (no ownership check for admin)
     await Review.destroy({ where: { id: id } });
+    
+    console.log(`Review ${id} deleted successfully by admin`);
     
     res.json({ message: 'Review deleted successfully' });
   } catch (error) {
