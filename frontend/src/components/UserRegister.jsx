@@ -74,7 +74,7 @@ const UserRegister = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:3001/register', {
+      const response = await axios.post('https://buku-tukar-559917148272.us-central1.run.app/register', {
         username: formData.username.trim(),
         email: formData.email.trim(),
         password: formData.password
